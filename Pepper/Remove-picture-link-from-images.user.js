@@ -18,10 +18,8 @@
 // ==/UserScript==
 
 (function () {
-  console.log('Start');
   new MutationObserver((mutations, observer) => {
     for (const mutation of mutations) {
-      console.log(mutation);
       if (mutation.type === 'childList') {
         mutation.target.querySelectorAll('a.clickable-external').forEach((link) => {
           link.removeAttribute('href');
