@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name        Remove picture link from images
 // @namespace   https://github.com/SylwesterZarebski/UserScripts
-// @version     1.0.0
+// @version     1.0.1
 //
-// @match       https://www.pepper.pl/promocje/*
+// @match       https://www.pepper.pl/*
 // @grant       none
 //
 // @author      Sylwester Zarębski
