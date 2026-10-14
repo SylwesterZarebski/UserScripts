@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name        Show offer description
 // @namespace   https://github.com/SylwesterZarebski/UserScripts
-// @version     1.0.0
+// @version     1.0.1
 //
 // @match       https://*.allegro.pl/produkt/*
+// @match       https://*.allegro.pl/oferta/*
 // @grant       none
 //
 // @author      Sylwester Zarębski
