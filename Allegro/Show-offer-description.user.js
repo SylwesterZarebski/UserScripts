@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Show offer description
 // @namespace   https://github.com/SylwesterZarebski/UserScripts
-// @version     1.0.1
+// @version     1.1.0
 //
 // @match       https://*.allegro.pl/produkt/*
 // @match       https://*.allegro.pl/oferta/*
@@ -18,17 +18,45 @@
 // @supportURL  https://github.com/SylwesterZarebski/UserScripts/issues
 // ==/UserScript==
 
-(function () {
-  new MutationObserver((mutations, observer) => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'childList') {
-        mutation.target.querySelectorAll('div[data-box-name="Container Description"] button[data-analytics-interaction-value="descriptionExpandBottom"][aria-expanded="false"]').forEach((link) => {
-          link.click();
-        });
-      }
+(() => {
+  // Document root
+  const root = document.body || document.documentElement;
+
+  // Collapsed description section toggle
+  const selector = 'div[data-box-name="allegro.showoffer.descriptionSection"] button[data-analytics-interaction-value="descriptionExpandBottom"][aria-expanded="false"]';
+
+  // Button declaration
+  let button = null;
+
+  // Click once per frame until the section is expanded, then stop observing
+  const expand = () => {
+    if (!button.isConnected) {
+      button = null; // Button was re-rendered, let the observer find the new one
+      return;
     }
-  }).observe(
-    document,
-    { subtree: true, characterData: true, childList: true }
-  );
+    if (button.getAttribute("aria-expanded") === "true") {
+      observer.disconnect();
+      return;
+    }
+    button.click();
+    requestAnimationFrame(expand);
+  };
+
+  // Find button, start expanding if found
+  const findButton = target => {
+    if (button)
+      return;
+    button = target.querySelector(selector);
+    if (button)
+      requestAnimationFrame(expand);
+  };
+
+  // Check DOM for changes
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => findButton(mutation.target));
+  });
+  observer.observe(root, { childList: true, subtree: true });
+
+  // Check document
+  findButton(root);
 })();
